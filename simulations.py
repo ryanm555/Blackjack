@@ -4,7 +4,7 @@ from blackjack import Blackjack
 from solutionTable import solution_table
 
 
-def simulatation(trials, STARTING_BALANCE):
+def simulatation(trials, starting_balance):
     total_winnings = 0
     
     for _ in range(trials):
@@ -12,7 +12,7 @@ def simulatation(trials, STARTING_BALANCE):
         # Start Game
         game = Blackjack(starting_balance)
         
-        balance = starting_balance
+        balance = game.user_balance
 
         #Intialize game_bet
         game_bet = 0
@@ -47,9 +47,7 @@ def simulatation(trials, STARTING_BALANCE):
                 if player != "user":
                     while game.get_hand_value(player) < 17:
                         game.player_hit(player)
-                    
-        
-            game.dealer_play()
+                            
             winning_result = game.check_winner()
             game.adjust_balance(bet, winning_result)
             
@@ -64,6 +62,5 @@ def simulatation(trials, STARTING_BALANCE):
 
 
 trials = 10000  # Number of simulations
-starting_balance = 1000  # Arbitrary starting balance
-ev = simulatation(trials, starting_balance)
+ev = simulatation(trials, STARTING_BALANCE)
 print(f"Estimated EV per $ bet: {ev:.4f}")
