@@ -4,7 +4,7 @@ from blackjack import Blackjack
 from solutionTable import solution_table
 
 
-def simulatation(trials, starting_balance):
+def simulatation(trials, STARTING_BALANCE):
     total_winnings = 0
     
     for _ in range(trials):
@@ -23,7 +23,7 @@ def simulatation(trials, starting_balance):
         
         while game_bet <= starting_balance:
             # Rule for betting
-            bet = random.randint(1, game.user_balance)  # Random valid bet
+            bet = random.randint(MIN_BET, min(game.user_balance, MAX_BET))  # Random valid bet
             balance -= bet
 
             #Note about ABOVE: We should probably add a minimum betting option in the Blackjack script.. - Amanuel
