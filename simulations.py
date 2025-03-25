@@ -45,15 +45,14 @@ def simulatation(trials, starting_balance):
 
             for player in game.players:
                 if player != "user":
-                    while game.get_hand_value(player) < 17:
+                    while game.get_hand_value(game.players['user']) < 17:
                         game.player_hit(player)
                             
             winning_result = game.check_winner()
             game.adjust_balance(bet, winning_result)
             
         
-        total_winnings += game.user_balance - starting_balance
-
+    total_winnings += game.user_balance - starting_balance
     
     total_bet = trials * starting_balance
     ev = total_winnings / total_bet
