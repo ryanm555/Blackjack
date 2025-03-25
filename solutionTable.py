@@ -25,3 +25,5 @@ solution_table = [                                      #Players Hand Value
 # You would access it by solution_table[15-4][10-2]
 # Generic Formula for acessing
 # solution_table[player_hand_value - 4][dealer_card_value - 2]
+
+

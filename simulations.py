@@ -42,6 +42,12 @@ def simulatation(trials, STARTING_BALANCE):
                     game.player_hit('user')
                 else:
                     break
+
+            for player in game.players:
+                if player != "user":
+                    while game.get_hand_value(player) < 17:
+                        game.player_hit(player)
+                    
         
             game.dealer_play()
             winning_result = game.check_winner()
