@@ -31,8 +31,17 @@ def simulatation(trials, STARTING_BALANCE):
             game_bet += bet
         
             # Simulate player's game (automated hitting strategy: hit below 17)
-            while game.get_hand_value(game.players['user']) < 17:
-                game.player_hit('user')
+            # while game.get_hand_value(game.players['user']) < 17:
+            #     game.player_hit('user')
+            
+            while True:
+                player_hand_value = game.get_hand_value(game.players['user'])
+                dealer_hand_value = game.get_hand_value(game.players['dealer'])
+                decision = solution_table[player_hand_value - 4][dealer_hand_value - 2]
+                if decision == "D":
+                    game.player_hit('user')
+                else:
+                    break
         
             game.dealer_play()
             winning_result = game.check_winner()

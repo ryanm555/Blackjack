@@ -1,6 +1,7 @@
 solution_table = [                                      #Players Hand Value
     #Dealers Card Value
     # 2    3    4    5    6    7    8    9    10   11
+    ["D", "D", "D", "D", "D", "D", "D", "D", "D", "D"], #4
     ["D", "D", "D", "D", "D", "D", "D", "D", "D", "D"], #5
     ["D", "D", "D", "D", "D", "D", "D", "D", "D", "D"], #6
     ["D", "D", "D", "D", "D", "D", "D", "D", "D", "D"], #7
@@ -21,6 +22,6 @@ solution_table = [                                      #Players Hand Value
 ]
 
 #Example if Dealers Card is 10 and Players Hand is 15
-# You would access it by solution_table[15-5][10-2]
+# You would access it by solution_table[15-4][10-2]
 # Generic Formula for acessing
-# solution_table[player_hand_value - 5][dealer_card_value - 2]
+# solution_table[player_hand_value - 4][dealer_card_value - 2]
