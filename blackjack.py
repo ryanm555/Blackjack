@@ -43,7 +43,7 @@ class Blackjack:
         aces = hand.count('A')
 
         #If over and have an ace, ace automatically = 1
-        while value > 21 and aces:
+        while value > 21 and aces > 0:
                 value -= 10
                 aces -= 1
 

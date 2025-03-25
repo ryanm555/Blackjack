@@ -36,7 +36,7 @@ def simulatation(trials, starting_balance):
             
             while True:
                 player_hand_value = game.get_hand_value(game.players['user'])
-                dealer_hand_value = game.get_hand_value(game.players['dealer'])
+                dealer_hand_value = game.get_hand_value(game.players['dealer'][0])
                 decision = solution_table[player_hand_value - 4][dealer_hand_value - 2]
                 if decision == "D":
                     game.player_hit('user')
@@ -50,6 +50,8 @@ def simulatation(trials, starting_balance):
                             
             winning_result = game.check_winner()
             game.adjust_balance(bet, winning_result)
+
+            game.reset_game()
             
         
     total_winnings += game.user_balance - starting_balance
@@ -60,6 +62,6 @@ def simulatation(trials, starting_balance):
     return ev
 
 
-trials = 10000  # Number of simulations
+trials = 10  # Number of simulations
 ev = simulatation(trials, STARTING_BALANCE)
 print(f"Estimated EV per $ bet: {ev:.4f}")

@@ -27,3 +27,4 @@ solution_table = [                                      #Players Hand Value
 # solution_table[player_hand_value - 4][dealer_card_value - 2]
 
 
+s = solution_table
