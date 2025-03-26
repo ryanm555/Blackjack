@@ -7,7 +7,10 @@ from solutionTable import solution_table
 def simulatation(trials, starting_balance):
     total_winnings = 0
     
-    for _ in range(trials):
+    for i in range(trials):
+
+        if i % 50 == 0:
+            print("Trial Number:", i) 
         
         # Start Game
         game = Blackjack(starting_balance)
@@ -36,7 +39,7 @@ def simulatation(trials, starting_balance):
             
             while True:
                 player_hand_value = game.get_hand_value(game.players['user'])
-                dealer_hand_value = game.get_hand_value(game.players['dealer'][0])
+                dealer_hand_value = game.get_card_value(game.players['dealer'][0])
                 if player_hand_value > 21:
                     decision = solution_table[player_hand_value - 4][dealer_hand_value - 2]
                 else:
@@ -57,7 +60,7 @@ def simulatation(trials, starting_balance):
             game.reset_game()
             
         
-    total_winnings += game.user_balance - starting_balance
+        total_winnings += game.user_balance - starting_balance
     
     total_bet = trials * starting_balance
     ev = total_winnings / total_bet
@@ -65,6 +68,6 @@ def simulatation(trials, starting_balance):
     return ev
 
 
-trials = 10  # Number of simulations
+trials = 10000  # Number of simulations
 ev = simulatation(trials, STARTING_BALANCE)
 print(f"Estimated EV per $ bet: {ev:.4f}")
