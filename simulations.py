@@ -40,20 +40,34 @@ def simulatation(trials, starting_balance):
             while True:
                 player_hand_value = game.get_hand_value(game.players['user'])
                 dealer_hand_value = game.get_card_value(game.players['dealer'][0])
+
                 if player_hand_value < 21:
                     decision = solution_table[player_hand_value - 4][dealer_hand_value - 2]
                 else:
                     decision = "S"
+                    for player in game.players:
+                        if player != "user" and player != "dealer ":
+                            if game.get_hand_value(player) < 17:
+                                game.player_hit(player)
 
                 if decision == "D":
                     game.player_hit('user')
+                    for player in game.players:
+                        if player != "user" and player != "dealer ":
+                            if game.get_hand_value(player) < 17:
+                                game.player_hit(player)
                 else:
                     break
 
-            for player in game.players:
-                if player != "user":
-                    while game.get_hand_value(game.players[player]) < 17:
-                        game.player_hit(player)
+            while True:
+                game.player_hit("dealer")
+                if game.get_hand_value("dealer") > 21:
+                    break
+
+            # for player in game.players:
+            #     if player != "user":
+            #         while game.get_hand_value(game.players[player]) < 17:
+            #             game.player_hit(player)
                             
             winning_result = game.check_winner()
             game.adjust_balance(bet, winning_result)
