@@ -7,16 +7,7 @@ class Blackjack:
         #Shuffle Deck
         random.shuffle(self.deck)
         #Players Card Initialized
-        self.players = {
-            'user': [],       # User's hand
-            'player1': [],    # Player 1's hand
-            'player2': [],    # Player 2's hand
-            'player3': [],    # Player 3's hand
-            'player4': [],    # Player 4's hand
-            'player5': [],    # Player 5's hand
-            'player6': [],    # Player 6's hand
-            'dealer': []      # Dealer's hand
-        }
+        self.players = PLAYERS
         self.game_over = False
         self.user_balance = balance
 
@@ -77,7 +68,9 @@ class Blackjack:
 
         # Otherwise, find the highest valid player score
         highest_score = -1
-        for player in ['user', 'player1', 'player2', 'player3', 'player4', 'player5', 'player6']:
+        for player in PLAYERS:
+            if player == 'dealer':
+                continue
             player_value = self.get_hand_value(self.players[player])
             if player_value > 21:
                 continue  # Skip players who bust
