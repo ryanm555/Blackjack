@@ -108,15 +108,15 @@ def main():
                     if not game.game_over:
                         draw_text(f"{player.capitalize()}'s hand: {hand[0]}, ?", font, WHITE, screen, 100, y_offset)
                     else:
-                        draw_text(f"{player.capitalize()}'s hand: {hand}, Value: {game.get_hand_value(hand)}", font, WHITE, screen, 100, y_offset)
+                        draw_text(f"{player.capitalize()}'s hand: {hand}, Value: {game.get_player_hand_value(player)}", font, WHITE, screen, 100, y_offset)
                 else:
-                    draw_text(f"{player.capitalize()}'s hand: {hand}, Value: {game.get_hand_value(hand)}", font, WHITE, screen, 100, y_offset)
+                    draw_text(f"{player.capitalize()}'s hand: {hand}, Value: {game.get_player_hand_value(player)}", font, WHITE, screen, 100, y_offset)
                 y_offset += 50
 
             # If user is done, let AI & dealer play
             if not user_turn and not game.game_over:
                 for ai_player in ["player1", "player2", "player3", "player4", "player5", "player6"]:
-                    while game.get_hand_value(game.players[ai_player]) < 17:
+                    while game.get_player_hand_value(ai_player) < 17:
                         game.player_hit(ai_player)
 
                 game.dealer_play()  # Dealer plays after AI players
@@ -138,7 +138,7 @@ def main():
                 # Show final hands
                 y_offset = 50
                 for player, hand in game.players.items():
-                    draw_text(f"{player.capitalize()}'s hand: {hand}, Value: {game.get_hand_value(hand)}", font, WHITE, screen, 100, y_offset)
+                    draw_text(f"{player.capitalize()}'s hand: {hand}, Value: {game.get_player_hand_value(player)}", font, WHITE, screen, 100, y_offset)
                     y_offset += 50
 
                 # Display winner(s)

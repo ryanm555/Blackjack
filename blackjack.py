@@ -28,8 +28,9 @@ class Blackjack:
         else:
             return int(card)
         
-    def get_hand_value(self, hand):
+    def get_player_hand_value(self, player):
         #Get value of the hand
+        hand = self.players.get(player)
         value = sum(self.get_card_value(card) for card in hand)
         aces = hand.count('A')
 
@@ -44,34 +45,34 @@ class Blackjack:
         if not self.game_over:
             self.players[player].append(self.draw_card())
 
-            if self.get_hand_value(self.players[player]) > 21:
+            if self.get_player_hand_value(player) > 21:
                 return True #Player Bustet Return True
             
             return False #No bust contiues Game
             
     def dealer_play(self):
         #Dealer can not draw any more cards if hand_value > 17
-        while self.get_hand_value(self.players['dealer']) < 17:
+        while self.get_player_hand_value('dealer') < 17:
             self.players['dealer'].append(self.draw_card())
     
     def reset_game(self):
         self.__init__(self.user_balance)
 
     def check_winner(self):
-        dealer_value = self.get_hand_value(self.players['dealer'])
+        dealer_value = self.get_player_hand_value('dealer')
         winning_players = []
         standoff_players = []
 
         # If dealer busts, all non-busted players win
         if dealer_value > 21:
-            return [player for player in self.players if player != 'dealer' and self.get_hand_value(self.players[player]) <= 21]
+            return [player for player in self.players if player != 'dealer' and self.get_player_hand_value(player) <= 21]
 
         # Otherwise, find the highest valid player score
         highest_score = -1
         for player in PLAYERS:
             if player == 'dealer':
                 continue
-            player_value = self.get_hand_value(self.players[player])
+            player_value = self.get_player_hand_value(player)
             if player_value > 21:
                 continue  # Skip players who bust
 
@@ -138,14 +139,14 @@ def main(balance):
         if player == 'dealer':
             print(f"Dealer's hand: ['{game.players['dealer'][0]}', 'Hidden']")
         else:
-            print(f"{player.capitalize()}'s hand: {game.players[player]}, Value: {game.get_hand_value(game.players[player])}")
+            print(f"{player.capitalize()}'s hand: {game.players[player]}, Value: {game.get_player_hand_value(game.players[player])}")
     
     # Players take turns (automated for all except user)
     for player in ['user', 'player1', 'player2', 'player3', 'player4', 'player5', 'player6']: 
         if player == 'user':  # User's turn (interactive)
             print(f"\n{player.capitalize()}'s Turn:")
-            while True and game.get_hand_value(game.players['user']) <= 21:
-                print(f"Your hand: {game.players[player]}, Value: {game.get_hand_value(game.players[player])}")
+            while True and game.get_player_hand_value(game.players['user']) <= 21:
+                print(f"Your hand: {game.players[player]}, Value: {game.get_player_hand_value(game.players[player])}")
 
                 action = input("Do you want to hit or stand? (h/s): ").lower()
                 if action == 'h':
@@ -160,18 +161,18 @@ def main(balance):
         else:  # Automated players
             print(f"\n{player.capitalize()}'s Turn:")
             #Players do not hit when over 17 like Dealer
-            if OTHER_PLAYERS_HIT_LIMIT <= game.get_hand_value(game.players[player]) <= 21:
+            if OTHER_PLAYERS_HIT_LIMIT <= game.get_player_hand_value(game.players[player]) <= 21:
                 print(f"{player.capitalize()} Stands")
-            while game.get_hand_value(game.players[player]) < 17:
+            while game.get_player_hand_value(game.players[player]) < 17:
                 game.player_hit(player)
                 print(f"{player.capitalize()} Drew {game.players[player][-1]}")
-                print(f"{player.capitalize()}'s hand: {game.players[player]}, Value: {game.get_hand_value(game.players[player])}")
+                print(f"{player.capitalize()}'s hand: {game.players[player]}, Value: {game.get_player_hand_value(game.players[player])}")
     
     # Dealer's turn
     print("\nDealer's turn...")
     game.dealer_play()
     print(f"Dealer Drew: {game.players['dealer'][-1]}")
-    print(f"Dealer's hand: {game.players['dealer']}, Value: {game.get_hand_value(game.players['dealer'])}")
+    print(f"Dealer's hand: {game.players['dealer']}, Value: {game.get_player_hand_value(game.players['dealer'])}")
 
     # Determine winners
     winning_result = game.check_winner()
