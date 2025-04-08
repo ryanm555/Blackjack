@@ -22,16 +22,20 @@ def simulatateThread(params):
         # Start Game
         game = Blackjack(starting_balance)
 
-        #Intialize game_bet
+        #Intialize night_bet and game.user_balance
         night_bet = 0
         
         # Each time this while loop runs represents 1 "night out"...
         # In this case, there is a max amount of money to spend in one trip.
         # Also, betting rules can be tweaked... See below.
         
+        game.user_balance = starting_balance
+
         while night_bet < starting_balance:
+            
             # Rule for betting
-            game.user_balance = starting_balance
+            if game.user_balance < MIN_BET:
+                break
             bet = random.randint(MIN_BET, min(game.user_balance, MAX_BET))  # Random valid bet
             game.user_balance -= bet
 
@@ -66,6 +70,8 @@ def simulatateThread(params):
             game.adjust_balance(bet, winning_result)
             total_winnings += game.user_balance
             game.reset_game()
+
+            
     
     total_bet = trials * starting_balance
     ev = total_winnings / total_bet
@@ -94,7 +100,7 @@ def simulations(trials, starting_balance):
         return ev
 
 if __name__ == '__main__':
-    trials = 100  # Number of simulations
+    trials = 100 # Number of simulations
     start_time = time.time()
     ev = simulations(trials, STARTING_BALANCE)
     print(f"Estimated EV per $ bet: {ev:.4f}")
