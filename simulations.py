@@ -16,6 +16,9 @@ def simulatateThread(params):
     
     for i in range(trials):
 
+        #Each iteration of this for loop represents 1 "night out"
+        #In this case, there is a max amount of money to spend in one trip.
+
         if i % 10 == 0:
             print(id, "Trial Number:", i) 
         
@@ -25,9 +28,8 @@ def simulatateThread(params):
         #Intialize night_bet and game.user_balance
         night_bet = 0
         
-        # Each time this while loop runs represents 1 "night out"...
-        # In this case, there is a max amount of money to spend in one trip.
-        # Also, betting rules can be tweaked... See below.
+        #Each iteration of this while loop is one game
+        #Also, betting rules can be tweaked... See below.
         
         game.user_balance = starting_balance
 
@@ -70,6 +72,8 @@ def simulatateThread(params):
             game.adjust_balance(bet, winning_result)
             game.reset_game()
         
+        #This needs to be inside the for loop..
+        #How much money are you leaving with after betting "starting_balance"
         total_winnings += game.user_balance
 
 
