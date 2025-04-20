@@ -23,4 +23,4 @@ PLAYERS = {
             'dealer': []      # Dealer's hand (KEEP THIS AT THE BOTTOM, DEALER PLAYS LAST)
         }
 
-THREAD_COUNT = 1
+THREAD_COUNT = 8

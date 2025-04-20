@@ -68,11 +68,12 @@ def simulatateThread(params):
                             
             winning_result = game.check_winner()
             game.adjust_balance(bet, winning_result)
-            total_winnings += game.user_balance
             game.reset_game()
+        
+        total_winnings += game.user_balance
+
 
             
-    
     total_bet = trials * starting_balance
     ev = total_winnings / total_bet
     return ev
@@ -100,7 +101,7 @@ def simulations(trials, starting_balance):
         return ev
 
 if __name__ == '__main__':
-    trials = 100 # Number of simulations
+    trials = 1000 # Number of simulations
     start_time = time.time()
     ev = simulations(trials, STARTING_BALANCE)
     print(f"Estimated EV per $ bet: {ev:.4f}")

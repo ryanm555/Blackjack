@@ -2,12 +2,17 @@ import random
 from settings import *
 class Blackjack:
     def __init__(self, balance):
+
         one_deck = ['2', '3', '4', '5', '6', '7', '8', '9', '10', "J", 'Q', 'K', 'A'] * 4
         self.deck = one_deck * NUM_DECKS
         #Shuffle Deck
         random.shuffle(self.deck)
         #Players Card Initialized
         self.players = PLAYERS
+        #Reset Cards    
+        for player in self.players:
+            self.players[player] = []
+        
         self.game_over = False
         self.user_balance = balance
 
