@@ -105,7 +105,7 @@ def simulations(trials, starting_balance):
         return ev
 
 if __name__ == '__main__':
-    trials = 1000 # Number of simulations
+    trials = 200000 # Number of simulations
     start_time = time.time()
     ev = simulations(trials, STARTING_BALANCE)
     print(f"Estimated EV per $ bet: {ev:.4f}")
