@@ -21,7 +21,7 @@ def simulatateThread(params):
         #Each iteration of this for loop represents 1 "night out"
         #In this case, there is a max amount of money to spend in one trip.
 
-        if i % 10 == 0:
+        if i % 1000 == 0:
             print(id, "Trial Number:", i) 
         
         # Start Game
