@@ -70,7 +70,7 @@ class Blackjack:
 
         if user_value > 21:
             winning_players = ['dealer']
-            return winning_players
+            return winning_players            
 
         # If dealer busts and user doesn't, then user gets money back.
         if dealer_value > 21:
@@ -109,6 +109,9 @@ class Blackjack:
         self.user_balance -= bet
         return bet
     
+    def has_blackjack(self, player):
+        return self.get_player_hand_value(player) == 21 and len(self.players[player]) == 2
+
     def adjust_balance(self, bet, winning_result):
         if isinstance(winning_result, tuple):
             standoff_players = winning_result[1]
@@ -116,10 +119,12 @@ class Blackjack:
                 self.user_balance += bet
         elif isinstance(winning_result, list):
             if 'user' in winning_result:
+                #Check for Blackjack
+                if self.has_blackjack('user'):
+                    self.user_balance += round(bet * 2.5)
                 #You get what you bet back * 2 to replace your bet and add your winnnings
-                self.user_balance += bet * 2
-        #elif winning_result == "Dealer Wins!":
-            #pass
+                else:
+                    self.user_balance += bet * 2
         else:
             self.user_balance += bet #Standoff Return Bet
 

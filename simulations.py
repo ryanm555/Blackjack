@@ -5,13 +5,15 @@ from solutionTable import solution_table
 from multiprocessing import Pool
 import time
 
-from math import floor
+import numpy as np
+from math import floor, sqrt
 
 def simulatateThread(params):
     trials = params[0]
     starting_balance = params[1]
     id = params[2]
     
+    nightly_results = []
     total_winnings = 0
     
     for i in range(trials):
@@ -38,7 +40,8 @@ def simulatateThread(params):
             # Rule for betting
             if game.user_balance < MIN_BET:
                 break
-            bet = random.randint(MIN_BET, min(game.user_balance, MAX_BET))  # Random valid bet
+            bet = random.randint(MIN_BET, min(game.user_balance, 25))  # Random valid bet
+            #bet = starting_balance
             game.user_balance -= bet
 
             #Note about ABOVE: We should probably add a minimum betting option in the Blackjack script.. - Amanuel
@@ -74,19 +77,18 @@ def simulatateThread(params):
         
         #This needs to be inside the for loop..
         #How much money are you leaving with after betting "starting_balance"
-        total_winnings += game.user_balance
-
-
-            
-    total_bet = trials * starting_balance
-    ev = total_winnings / total_bet
-    return ev
+        nightly_ev = game.user_balance / starting_balance
+        nightly_results.append(nightly_ev)
+    
+    return nightly_results
 
 def simulations(trials, starting_balance):
     trials_assigned = []
     trials_left = trials
-    ev = 0
+    all_nightly_results = []
     params = []
+    
+    
     for i in range(THREAD_COUNT):
         trials_to_do = floor(trials/THREAD_COUNT)
         trials_left -= trials_to_do
@@ -97,16 +99,20 @@ def simulations(trials, starting_balance):
         trials_assigned.append(trials_to_do)
         params.append([trials_to_do, starting_balance, i])
     
-    i = 0
     with Pool(THREAD_COUNT) as p:
-        for x in p.map(simulatateThread, params):
-            ev += x * (trials_assigned[i]/trials)
-            i+=1
-        return ev
+        for thread_results in p.map(simulatateThread, params):
+            all_nightly_results.extend(thread_results)
+    
+    # Calculate overall EV and standard deviation from all results
+    overall_ev = np.mean(all_nightly_results)
+    overall_std_dev = np.std(all_nightly_results)
+
+    return overall_ev, overall_std_dev
 
 if __name__ == '__main__':
-    trials = 200000 # Number of simulations
+    trials = 100000 # Number of simulations
     start_time = time.time()
-    ev = simulations(trials, STARTING_BALANCE)
+    ev, std_dev = simulations(trials, STARTING_BALANCE)
     print(f"Estimated EV per $ bet: {ev:.4f}")
+    print(f"Standard Deviation of nightly EV: {std_dev:.4f}")
     print(f"Calculated in {time.time() - start_time:.2f}")
