@@ -1,7 +1,7 @@
 import random
 from settings import *
 from blackjack import Blackjack
-from solutionTable import solution_table
+from solutionTable import solution_table, soft_solution_table
 from multiprocessing import Pool
 import time
 
@@ -56,14 +56,22 @@ def simulatateThread(params):
             player_hand_value = 0
             decision = ''
 
+            Soft = False
+
             for player in game.players:                
                 if player == 'user':
-                    while game.get_player_hand_value('user') < 21 and decision != 'S':
-                        player_hand_value = game.get_player_hand_value('user')
-                        decision = solution_table[player_hand_value - 4][dealer_hand_value - 2]
+                    Soft = False
+                    player_hand_value, Soft = game.get_user_hand_value('user', Soft)
+                    while player_hand_value < 21 and decision != 'S':
+                        if not Soft:
+                            decision = solution_table[player_hand_value - 4][dealer_hand_value - 2]
+                        else:
+                            decision = soft_solution_table[player_hand_value-12][dealer_hand_value - 2]
 
                         if decision == "D":
                             game.player_hit('user')
+
+                        player_hand_value, Soft = game.get_user_hand_value('user', Soft)
                 else:
                     while game.get_player_hand_value(player) < 21:
                         if game.get_player_hand_value(player) < 17:
@@ -110,7 +118,7 @@ def simulations(trials, starting_balance):
     return overall_ev, overall_std_dev
 
 if __name__ == '__main__':
-    trials = 100000 # Number of simulations
+    trials = 300000 # Number of simulations
     start_time = time.time()
     ev, std_dev = simulations(trials, STARTING_BALANCE)
     print(f"Estimated EV per $ bet: {ev:.4f}")

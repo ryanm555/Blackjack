@@ -12,7 +12,7 @@ class Blackjack:
         #Reset Cards    
         for player in self.players:
             self.players[player] = []
-        
+
         self.game_over = False
         self.user_balance = balance
 
@@ -34,6 +34,7 @@ class Blackjack:
             return int(card)
         
     def get_player_hand_value(self, player):
+        
         #Get value of the hand
         hand = self.players.get(player)
         value = sum(self.get_card_value(card) for card in hand)
@@ -45,6 +46,25 @@ class Blackjack:
                 aces -= 1
 
         return value
+    
+    def get_user_hand_value(self, player, Soft):
+
+        #Get value of the hand
+        hand = self.players.get(player)
+        value = sum(self.get_card_value(card) for card in hand)
+        aces = hand.count('A')
+
+        
+        if aces > 0 and value - 11*aces < 10:   #Activates "Softness" if you have an Ace AND you can hold an 11..
+            Soft = True
+
+        #Key Difference, once Hard you can't be soft again
+        while value > 21 and aces > 0:
+                value -= 10
+                aces -= 1
+                Soft = False
+
+        return value, Soft
     
     def player_hit(self, player, ace_value=11):
         if not self.game_over:
