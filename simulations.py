@@ -57,14 +57,6 @@ def simulatateThread(params):
             decision = ''
 
             for player in game.players:                
-                if player == 'user':
-                    while game.get_player_hand_value('user') < 21 and decision != 'S':
-                        player_hand_value = game.get_player_hand_value('user')
-                        decision = solution_table[player_hand_value - 4][dealer_hand_value - 2]
-
-                        if decision == "D":
-                            game.player_hit('user')
-                else:
                     while game.get_player_hand_value(player) < 21:
                         if game.get_player_hand_value(player) < 17:
                             game.player_hit(player)
