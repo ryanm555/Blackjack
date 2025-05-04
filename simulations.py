@@ -14,14 +14,13 @@ def simulatateThread(params):
     id = params[2]
     
     nightly_results = []
-    total_winnings = 0
     
     for i in range(trials):
 
         #Each iteration of this for loop represents 1 "night out"
         #In this case, there is a max amount of money to spend in one trip.
 
-        if i % 1000 == 0:
+        if i % 20000 == 0 and id == 0:
             print(id, "Trial Number:", i) 
         
         # Start Game
@@ -35,13 +34,11 @@ def simulatateThread(params):
         
         game.user_balance = starting_balance
 
-        while night_bet < starting_balance:
+        while night_bet + CONSTANT_BET <= starting_balance:
             
             # Rule for betting
-            if game.user_balance < MIN_BET:
-                break
-            bet = random.randint(MIN_BET, min(game.user_balance, 25))  # Random valid bet
-            #bet = starting_balance
+            bet = CONSTANT_BET
+            #bet = random.randint(MIN_BET, min(game.user_balance, 25))  # Random valid bet
             game.user_balance -= bet
 
             #Note about ABOVE: We should probably add a minimum betting option in the Blackjack script.. - Amanuel
@@ -118,7 +115,7 @@ def simulations(trials, starting_balance):
     return overall_ev, overall_std_dev
 
 if __name__ == '__main__':
-    trials = 300000 # Number of simulations
+    trials = 200000 # Number of simulations
     start_time = time.time()
     ev, std_dev = simulations(trials, STARTING_BALANCE)
     print(f"Estimated EV per $ bet: {ev:.4f}")
