@@ -34,14 +34,10 @@ def simulatateThread(params):
         
         game.user_balance = starting_balance
 
-        while night_bet < starting_balance:
+        while night_bet + CONSTANT_BET < starting_balance:
             
-            # Rule for betting
-            if game.user_balance < MIN_BET:
-                break
             bet = CONSTANT_BET
-            # bet = random.randint(MIN_BET, min(game.user_balance, 25))  # Random valid bet
-            #bet = starting_balance
+
             game.user_balance -= bet
 
             #Note about ABOVE: We should probably add a minimum betting option in the Blackjack script.. - Amanuel
