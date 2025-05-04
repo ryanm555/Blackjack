@@ -14,14 +14,13 @@ def simulatateThread(params):
     id = params[2]
     
     nightly_results = []
-    total_winnings = 0
     
     for i in range(trials):
 
         #Each iteration of this for loop represents 1 "night out"
         #In this case, there is a max amount of money to spend in one trip.
 
-        if i % 1000 == 0:
+        if i % 20000 == 0 and id == 0:
             print(id, "Trial Number:", i) 
         
         # Start Game
@@ -40,7 +39,8 @@ def simulatateThread(params):
             # Rule for betting
             if game.user_balance < MIN_BET:
                 break
-            bet = random.randint(MIN_BET, min(game.user_balance, 25))  # Random valid bet
+            bet = CONSTANT_BET
+            # bet = random.randint(MIN_BET, min(game.user_balance, 25))  # Random valid bet
             #bet = starting_balance
             game.user_balance -= bet
 
@@ -77,7 +77,7 @@ def simulatateThread(params):
         
         #This needs to be inside the for loop..
         #How much money are you leaving with after betting "starting_balance"
-        nightly_ev = game.user_balance / starting_balance
+        nightly_ev = game.user_balance / starting_balance #Techically, this is wrong. It assumes that all money is used, but w/ $25 bet consistently it actually is.
         nightly_results.append(nightly_ev)
     
     return nightly_results
