@@ -34,8 +34,11 @@ def simulatateThread(params):
         
         game.user_balance = starting_balance
 
-        while night_bet + CONSTANT_BET < starting_balance:
+        while night_bet < starting_balance:
             
+            if night_bet + CONSTANT_BET > STARTING_BALANCE:
+                break
+
             bet = CONSTANT_BET
 
             game.user_balance -= bet
@@ -67,7 +70,7 @@ def simulatateThread(params):
         
         #This needs to be inside the for loop..
         #How much money are you leaving with after betting "starting_balance"
-        nightly_ev = game.user_balance / starting_balance #Techically, this is wrong. It assumes that all money is used, but w/ $25 bet consistently it actually is.
+        nightly_ev = (game.user_balance - (starting_balance - night_bet) ) / night_bet #Techically, this is wrong. It assumes that all money is used, but w/ $25 bet consistently it actually is.
         nightly_results.append(nightly_ev)
     
     return nightly_results
@@ -100,7 +103,7 @@ def simulations(trials, starting_balance):
     return overall_ev, overall_std_dev
 
 if __name__ == '__main__':
-    trials = 100000 # Number of simulations
+    trials = 500000 # Number of simulations
     start_time = time.time()
     ev, std_dev = simulations(trials, STARTING_BALANCE)
     print(f"Estimated EV per $ bet: {ev:.4f}")
