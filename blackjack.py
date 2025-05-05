@@ -65,33 +65,36 @@ class Blackjack:
 
     def check_winner(self):
         dealer_value = self.get_player_hand_value('dealer')
-        user_value = self.get_player_hand_value('user')
         winning_players = []
 
-        if user_value > 21:
-            winning_players = ['dealer']
-            return winning_players            
-
-        # If dealer busts and user doesn't, then user gets money back.
+        # If dealer busts, all non-busted players win
         if dealer_value > 21:
-            winning_players = ['user']
-            return winning_players
+            return [player for player in self.players if player != 'dealer' and self.get_player_hand_value(player) <= 21]
 
-        # Otherwise, determine if dealer or user had the higher score
-        if dealer_value > user_value:
-            winning_players = ['dealer']
-            return winning_players
+        # Otherwise, find the highest valid player score
+        highest_score = -1
+        for player in PLAYERS:
+
+            player_value = self.get_player_hand_value(player)
+            if player_value > 21:
+                continue  # Skip players who bust
+
+            #Check if the player is currently >= to current highest_score
+            if player_value >= highest_score:
+                if player_value > highest_score: #New Highest Score Found
+                    highest_score = player_value
+                    winning_players.clear()
+                    winning_players.append(player)
+                    Standoff = False
+                else: #equals old High score so add on
+                    winning_players.append(player)
+                    Standoff = True
         
-        if user_value > dealer_value:
-            winning_players = ['user']
-            return winning_players
-
-        #Standoff Indicates dealer = highest_value of the players
-        #Nobody wins all bets are returned
-        if dealer_value == user_value:
-            winning_players = ['user', 'dealer']
+        if Standoff:
             return ("Standoff", winning_players)
 
+        return winning_players
+    
     def place_bet(self):
         # Prompt for bet from the user
         print(f"\nYour balance: {self.user_balance}")
@@ -119,15 +122,10 @@ class Blackjack:
                 self.user_balance += bet
         elif isinstance(winning_result, list):
             if 'user' in winning_result:
-                #Check for Blackjack
-                if self.has_blackjack('user'):
-                    self.user_balance += round(bet * 2.5)
                 #You get what you bet back * 2 to replace your bet and add your winnnings
-                else:
-                    self.user_balance += bet * 2
-        else:
-            self.user_balance += bet #Standoff Return Bet
-
+                self.user_balance += bet * 2
+        elif winning_result == "Dealer Wins!":
+            pass
 
 def main(balance):
     game = Blackjack(balance)
