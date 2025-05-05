@@ -123,7 +123,11 @@ class Blackjack:
         elif isinstance(winning_result, list):
             if 'user' in winning_result:
                 #You get what you bet back * 2 to replace your bet and add your winnnings
-                self.user_balance += bet * 2
+            
+                if self.has_blackjack('user'):
+                    self.user_balance += bet * 2.5
+                else:
+                    self.user_balance += bet * 2
         elif winning_result == "Dealer Wins!":
             pass
 
